@@ -2,7 +2,7 @@
 This package provides a simple and lightweight implementation of a count-based rate limiter
 
 # usage
-This package provides a `Limiter` struct and only 5 associated methods: `Start`, `Allow`, `AllowN` and `Stop`
+This package provides a `Limiter` struct and only 5 associated methods: `NewLimiter`, `Start`, `Allow`, `AllowN` and `Stop`
 
 - `NewLimiter` generates a Limiter with specified ratelimit and time interval. N(N = ratelimit) requests at most could go through in every time interval.
 
