@@ -14,7 +14,7 @@ This package provides a `Limiter` struct and only 5 associated methods: `NewLimi
 
 - `Stop` makes Limiter stop and resets the Limiter. And it's not harmful to stop a Limiter that is already stoped, for it does nothing and return.
 
-here is a example for simple usage:
+here is an example for simple usage:
 ```
 // get a limiter l 
 l := NewLimiter(1000, 1*time.Second)

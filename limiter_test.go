@@ -3,6 +3,7 @@ package countinglimiter
 import (
 	"fmt"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 )
@@ -11,7 +12,7 @@ func TestLimiter(t *testing.T) {
 	l := NewLimiter(1000, 1*time.Second)
 
 	// stoped limiter case: 0 head off
-	headOff := 0
+	var headOff int64 = 0
 	for i := 0; i < 2000; i++ {
 		if !l.AllowN(1) {
 			headOff += 1
@@ -28,12 +29,12 @@ func TestLimiter(t *testing.T) {
 		go func() {
 			defer wg.Done()
 			if !l.Allow() {
-				headOff += 1
+				atomic.AddInt64(&headOff, 1)
 			}
 		}()
 	}
 	wg.Wait()
-	fmt.Printf("started limiter case. headOff: %d\n", headOff) // around 1000
+	fmt.Printf("started limiter case. headOff: %d\n", headOff) // 1000
 
 	// stop and restart case
 	l.Stop()
@@ -44,10 +45,10 @@ func TestLimiter(t *testing.T) {
 		go func() {
 			defer wg.Done()
 			if !l.Allow() {
-				headOff += 1
+				atomic.AddInt64(&headOff, 1)
 			}
 		}()
 	}
 	wg.Wait()
-	fmt.Printf("stop and restart case. headOff: %d\n", headOff) // around 1000
+	fmt.Printf("stop and restart case. headOff: %d\n", headOff) // 1000
 }
